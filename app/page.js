@@ -214,6 +214,36 @@ export default function Home() {
       updatePrestationsProgress();
     }
 
+    /* ---------- services visual sync (sticky image follows active card) ---------- */
+    const servicesVisual = document.getElementById("servicesVisual");
+    const serviceCards = document.querySelectorAll(".service-card[data-service-index]");
+    const serviceNames = ["Commerces & devantures", "Bureaux & tertiaire", "Particuliers & résidentiel"];
+
+    if (servicesVisual && serviceCards.length) {
+      const visualImgs = servicesVisual.querySelectorAll(".services-visual__img");
+      const visualSteps = servicesVisual.querySelectorAll(".services-visual__steps span");
+      const visualName = document.getElementById("servicesVisualName");
+      const visualIndex = document.getElementById("servicesVisualStep");
+
+      const setActiveService = (index) => {
+        visualImgs.forEach((img) => img.classList.toggle("is-active", Number(img.dataset.index) === index));
+        visualSteps.forEach((s, i) => s.classList.toggle("is-active", i === index));
+        if (visualName) visualName.textContent = serviceNames[index];
+        if (visualIndex) visualIndex.textContent = `0${index + 1} / 03`;
+      };
+
+      const servicesIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveService(Number(entry.target.dataset.serviceIndex));
+          }
+        });
+      }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+
+      serviceCards.forEach((card) => servicesIo.observe(card));
+      cleanups.push(() => servicesIo.disconnect());
+    }
+
     /* ---------- realisations filter ---------- */
     const filterBtns = document.querySelectorAll(".filter-btn");
     const galleryItems = document.querySelectorAll(".gallery-item");
@@ -413,52 +443,52 @@ export default function Home() {
                   { text: "Commerçant, entreprise ou particulier, on adapte la fréquence, les produits et le matériel à votre vitrage et à votre budget." },
                 ])}
               </p>
+              <ul className="badge-row badge-row--intro">
+                <li>Devis gratuit sous 24h</li>
+                <li>Contrats ponctuels ou récurrents</li>
+                <li>Matériel pro &amp; produits éco</li>
+              </ul>
             </div>
           </div>
 
           <div className="triptych container">
             <div className="triptych__pin">
               <div className="triptych__pin-inner reveal" data-reveal>
-                <span className="folder-tab"></span>
-                <span className="folder-tab folder-tab--2"></span>
-                <div className="triptych__pin-card">
-                  <h3>Nos services<br />sur-mesure</h3>
-                  <p>Trois formules pensées pour chaque type de vitrage, avec un interlocuteur unique du devis à l&apos;intervention.</p>
-                  <ul className="check-list">
-                    <li>Devis gratuit sous 24h</li>
-                    <li>Contrats ponctuels ou récurrents</li>
-                    <li>Matériel pro &amp; produits éco</li>
-                  </ul>
+                <div className="services-visual" id="servicesVisual">
+                  <img className="services-visual__img is-active" data-index="0" src="/assets/img/service-commerces.webp" alt="Commerces & devantures" />
+                  <img className="services-visual__img" data-index="1" src="/assets/img/service-bureaux.webp" alt="Bureaux & tertiaire" />
+                  <img className="services-visual__img" data-index="2" src="/assets/img/service-particuliers.webp" alt="Particuliers & résidentiel" />
+                  <div className="services-visual__overlay"></div>
+                  <div className="services-visual__steps">
+                    <span className="is-active"></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div className="services-visual__caption">
+                    <span className="services-visual__index" id="servicesVisualStep">01 / 03</span>
+                    <span className="services-visual__name" id="servicesVisualName">Commerces &amp; devantures</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="triptych__cards">
-              <article className="service-card reveal" data-reveal>
+              <article className="service-card reveal" data-reveal data-service-index="0">
                 <span className="pill pill--tag">Devantures &amp; Commerces</span>
-                <div className="service-card__img">
-                  <img src="/assets/img/service-commerces.webp" alt="Devanture commerciale vitrée" />
-                </div>
                 <h3>Commerces &amp; devantures</h3>
                 <p>Vitrines, devantures, enseignes lumineuses&nbsp;: la première image de votre commerce mérite d&apos;être irréprochable. Passage tôt le matin, sans gêner votre activité.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre commerces →</a>
               </article>
 
-              <article className="service-card reveal" data-reveal>
+              <article className="service-card reveal" data-reveal data-service-index="1">
                 <span className="pill pill--tag">Bureaux &amp; Tertiaire</span>
-                <div className="service-card__img">
-                  <img src="/assets/img/service-bureaux.webp" alt="Façade vitrée d'un immeuble de bureaux" />
-                </div>
                 <h3>Bureaux &amp; tertiaire</h3>
                 <p>Halls d&apos;entrée, open spaces, façades vitrées&nbsp;: un cadre de travail impeccable qui valorise votre entreprise auprès de vos clients. Contrats mensuels ou trimestriels.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre bureaux →</a>
               </article>
 
-              <article className="service-card reveal" data-reveal>
+              <article className="service-card reveal" data-reveal data-service-index="2">
                 <span className="pill pill--tag">Particuliers &amp; Résidentiel</span>
-                <div className="service-card__img">
-                  <img src="/assets/img/service-particuliers.webp" alt="Maison avec grandes baies vitrées" />
-                </div>
                 <h3>Particuliers &amp; résidentiel</h3>
                 <p>Baies vitrées, vérandas, fenêtres en hauteur ou difficiles d&apos;accès&nbsp;: on s&apos;occupe de tout, avec du matériel adapté et sans traces.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre particuliers →</a>
