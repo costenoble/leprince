@@ -4,6 +4,39 @@ import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
+    const loader = document.getElementById("loader");
+    const loaderWord = document.getElementById("loaderWord");
+    const navEl = document.querySelector(".nav");
+    const body = document.body;
+
+    body.style.overflow = "hidden";
+
+    const raf1 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        loaderWord.classList.add("is-visible");
+      });
+    });
+
+    const revealDelay = 2400;
+    const hideTimer = setTimeout(() => {
+      loader.classList.add("is-hidden");
+      navEl.classList.add("is-loaded");
+      body.style.overflow = "";
+    }, revealDelay);
+
+    const removeTimer = setTimeout(() => {
+      loader.style.display = "none";
+    }, revealDelay + 650);
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      clearTimeout(hideTimer);
+      clearTimeout(removeTimer);
+      body.style.overflow = "";
+    };
+  }, []);
+
+  useEffect(() => {
     const cleanups = [];
     const on = (target, type, handler, opts) => {
       target.addEventListener(type, handler, opts);
@@ -216,6 +249,12 @@ export default function Home() {
 
   return (
     <>
+      <div className="loader" id="loader">
+        <div className="loader__word" id="loaderWord">
+          <span>V</span><span>I</span><span>T</span><span>R</span><span>E</span><span>O</span>
+        </div>
+      </div>
+
       <header className="nav-wrap">
         <nav className="nav" id="nav">
           <a href="#top" className="nav__brand">

@@ -166,8 +166,10 @@ p{margin:0;}
   border-radius:var(--radius-pill);
   padding:10px 12px 10px 22px;
   box-shadow:0 12px 32px -18px rgba(7,48,43,.35);
-  transition:box-shadow .3s, background .3s;
+  transform:scale(0);
+  transition:box-shadow .3s, background .3s, transform 2s ease-in-out;
 }
+.nav.is-loaded{transform:scale(1);}
 .nav-wrap.is-scrolled .nav{box-shadow:0 16px 36px -16px rgba(7,48,43,.4);}
 .nav__brand{display:flex;align-items:center;gap:10px;font-weight:800;}
 .nav__mark{
@@ -699,3 +701,40 @@ p{margin:0;}
 
 /* ---------- magnetic hover ---------- */
 .magnetic{will-change:transform;}
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+.loader{
+  position:fixed;inset:0;z-index:999;
+  background:var(--teal-900);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s var(--ease), visibility .6s var(--ease);
+}
+.loader.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.loader__word{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.6rem,9vw,5.5rem);
+  color:#fff;
+  display:flex;
+  gap:.03em;
+}
+.loader__word span{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(50px);
+  transition:opacity 1.2s var(--ease), transform 1.2s var(--ease);
+}
+.loader__word.is-visible span{
+  opacity:1;
+  transform:translateY(0);
+}
+.loader__word span:nth-child(2){transition-delay:.16s;}
+.loader__word span:nth-child(3){transition-delay:.32s;}
+.loader__word span:nth-child(4){transition-delay:.48s;}
+.loader__word span:nth-child(5){transition-delay:.64s;}
+.loader__word span:nth-child(6){transition-delay:.8s;}
