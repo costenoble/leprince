@@ -18,6 +18,23 @@ function waveLetters(text, stepMs = 160) {
   ));
 }
 
+function scrollRevealWords(segments) {
+  let i = -1;
+  return segments.flatMap((seg, si) =>
+    seg.text
+      .split(" ")
+      .filter(Boolean)
+      .map((w, wi) => {
+        i += 1;
+        return (
+          <span className={"word" + (seg.accent ? " word--accent" : "")} key={`${si}-${wi}`}>
+            {w}{" "}
+          </span>
+        );
+      })
+  );
+}
+
 export default function Home() {
   useEffect(() => {
     const loader = document.getElementById("loader");
@@ -169,6 +186,32 @@ export default function Home() {
       on(window, "touchend", stopDrag);
 
       on(baSlider, "click", (e) => setBaPosition(positionFromEvent(e.clientX)));
+    }
+
+    /* ---------- scroll-reveal words (prestations intro) ---------- */
+    const prestationsIntro = document.getElementById("prestationsIntro");
+    const prestationsWords = prestationsIntro ? prestationsIntro.querySelectorAll(".word") : [];
+    let prestationsTicking = false;
+
+    function updatePrestationsProgress() {
+      const rect = prestationsIntro.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+      const litCount = Math.round(progress * prestationsWords.length);
+      prestationsWords.forEach((w, i) => w.classList.toggle("is-lit", i < litCount));
+    }
+
+    if (prestationsIntro && prestationsWords.length) {
+      const onPrestationsScroll = () => {
+        if (prestationsTicking) return;
+        prestationsTicking = true;
+        requestAnimationFrame(() => {
+          updatePrestationsProgress();
+          prestationsTicking = false;
+        });
+      };
+      on(window, "scroll", onPrestationsScroll, { passive: true });
+      updatePrestationsProgress();
     }
 
     /* ---------- realisations filter ---------- */
@@ -360,10 +403,17 @@ export default function Home() {
         </section>
 
         <section className="section" id="services">
-          <div className="container">
-            <span className="pill pill--eyebrow reveal" data-reveal>Nos prestations</span>
-            <h2 className="h2 reveal" data-reveal>Des prestations pensées pour chaque vitrage, et pour <span className="text-accent">sublimer votre image</span></h2>
-            <p className="lede reveal" data-reveal>Commerçant, entreprise ou particulier&nbsp;: on adapte la fréquence, les produits et le matériel à votre vitrage et à votre budget.</p>
+          <div className="prestations-intro" id="prestationsIntro">
+            <div className="prestations-intro__sticky">
+              <span className="pill pill--eyebrow">Nos prestations</span>
+              <p className="prestations-intro__text">
+                {scrollRevealWords([
+                  { text: "Des prestations pensées pour chaque vitrage, et pour" },
+                  { text: "sublimer votre image.", accent: true },
+                  { text: "Commerçant, entreprise ou particulier, on adapte la fréquence, les produits et le matériel à votre vitrage et à votre budget." },
+                ])}
+              </p>
+            </div>
           </div>
 
           <div className="triptych container">
