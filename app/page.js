@@ -9,6 +9,10 @@ export default function Home() {
     const navEl = document.querySelector(".nav");
     const body = document.body;
 
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    window.scrollTo(0, 0);
     body.style.overflow = "hidden";
 
     const raf1 = requestAnimationFrame(() => {
@@ -22,6 +26,7 @@ export default function Home() {
       loader.classList.add("is-hidden");
       navEl.classList.add("is-loaded");
       body.style.overflow = "";
+      window.scrollTo(0, 0);
     }, revealDelay);
 
     const removeTimer = setTimeout(() => {
