@@ -596,10 +596,18 @@ p{margin:0;}
   font-size:clamp(4rem,18vw,13rem);
   line-height:.8;
   color:rgba(255,255,255,.06);
-  text-align:left;
-  padding-left:24px;
+  text-align:center;
   white-space:nowrap;
   user-select:none;
+}
+.footer__wordmark[data-reveal]{
+  opacity:0;
+  transform:translate(-70px, 70px);
+  transition:opacity 1s var(--ease), transform 1s var(--ease);
+}
+.footer__wordmark[data-reveal].is-visible{
+  opacity:1;
+  transform:translate(0,0);
 }
 .footer__bottom{
   display:flex;flex-wrap:wrap;gap:14px 26px;justify-content:space-between;

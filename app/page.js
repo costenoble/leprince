@@ -697,11 +697,6 @@ export default function Home() {
             <div className="footer__col footer__col--contact">
               <h4>On discute de votre projet ?</h4>
               <a href="#devis" className="btn btn--light">Demander un devis</a>
-              <div className="footer__socials">
-                <a href="#" aria-label="Instagram">Instagram</a>
-                <a href="#" aria-label="Facebook">Facebook</a>
-                <a href="#" aria-label="Avis Google">Avis Google</a>
-              </div>
             </div>
           </div>
 
@@ -713,7 +708,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="footer__wordmark" aria-hidden="true">VITREO</div>
+        <div className="footer__wordmark" data-reveal aria-hidden="true">VITREO</div>
 
         <div className="container footer__bottom">
           <p>© 2026 Vitréo — Site de démonstration. Tous droits réservés.</p>
