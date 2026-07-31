@@ -47,7 +47,7 @@ export default function Home() {
 
     const removeTimer = setTimeout(() => {
       loader.style.display = "none";
-    }, revealDelay + 650);
+    }, revealDelay + 950);
 
     return () => {
       cancelAnimationFrame(raf1);
