@@ -708,7 +708,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="footer__wordmark" data-reveal aria-hidden="true">VITREO</div>
+        <div className="footer__wordmark" data-reveal aria-hidden="true">
+          <span>V</span><span>I</span><span>T</span><span>R</span><span>E</span><span>O</span>
+        </div>
 
         <div className="container footer__bottom">
           <p>© 2026 Vitréo — Site de démonstration. Tous droits réservés.</p>
