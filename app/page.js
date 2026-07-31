@@ -2,6 +2,22 @@
 
 import { useEffect } from "react";
 
+function waveLetters(text, stepMs = 160) {
+  let i = -1;
+  return text.split(" ").map((word, wi) => (
+    <span className="wave-word" key={wi}>
+      {word.split("").map((ch, ci) => {
+        i += 1;
+        return (
+          <span key={ci} style={{ transitionDelay: `${i * stepMs}ms` }}>
+            {ch}
+          </span>
+        );
+      })}
+    </span>
+  ));
+}
+
 export default function Home() {
   useEffect(() => {
     const loader = document.getElementById("loader");
@@ -256,15 +272,15 @@ export default function Home() {
     <>
       <div className="loader" id="loader">
         <div className="loader__word" id="loaderWord">
-          <span>V</span><span>I</span><span>T</span><span>R</span><span>E</span><span>O</span>
+          {waveLetters("FLASH NET")}
         </div>
       </div>
 
       <header className="nav-wrap">
         <nav className="nav" id="nav">
           <a href="#top" className="nav__brand">
-            <span className="nav__mark">V.</span>
-            <span className="nav__word">Vitréo</span>
+            <span className="nav__mark">FN</span>
+            <span className="nav__word">Flash Net</span>
           </a>
           <ul className="nav__links">
             <li><a href="#services">Services</a></li>
@@ -301,7 +317,7 @@ export default function Home() {
               </div>
 
               <div className="hero__wordmark-wrap">
-                <h1 className="hero__wordmark reveal" data-reveal style={{ "--delay": ".05s" }}>VITREO</h1>
+                <h1 className="hero__wordmark reveal" data-reveal style={{ "--delay": ".05s" }}>FLASH NET</h1>
                 <button className="hero__badge-cta magnetic" id="magneticCta">
                   <span>Obtenir mon<br />devis gratuit</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -753,11 +769,11 @@ export default function Home() {
         </div>
 
         <div className="footer__wordmark" data-reveal aria-hidden="true">
-          <span>V</span><span>I</span><span>T</span><span>R</span><span>E</span><span>O</span>
+          {waveLetters("FLASH NET")}
         </div>
 
         <div className="container footer__bottom">
-          <p>© 2026 Vitréo — Site de démonstration. Tous droits réservés.</p>
+          <p>© 2026 Flash Net — Site de démonstration. Tous droits réservés.</p>
           <div className="footer__legal">
             <a href="#">Mentions légales</a>
             <a href="#">Politique de confidentialité</a>
@@ -778,9 +794,9 @@ export default function Home() {
         </button>
         <div className="rdv-widget__panel" id="rdvPanel" hidden>
           <div className="rdv-widget__head">
-            <div className="rdv-widget__avatar">V.</div>
+            <div className="rdv-widget__avatar">FN</div>
             <div>
-              <strong>Vitréo</strong>
+              <strong>Flash Net</strong>
               <span>Répond généralement en 1h</span>
             </div>
             <button className="rdv-widget__close" id="rdvClose" aria-label="Fermer">✕</button>

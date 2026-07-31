@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Vitréo — Nettoyage de vitres pour professionnels & particuliers",
+  title: "Flash Net — Nettoyage de vitres pour professionnels & particuliers",
   description:
     "Nettoyage de vitres, devantures, bureaux et particuliers. Devis gratuit sous 24h, produits écologiques, intervention rapide.",
 };
