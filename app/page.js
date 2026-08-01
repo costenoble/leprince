@@ -221,15 +221,18 @@ export default function Home() {
 
     if (servicesVisual && serviceCards.length) {
       const visualImgs = servicesVisual.querySelectorAll(".services-visual__img");
-      const visualSteps = servicesVisual.querySelectorAll(".services-visual__steps span");
       const visualName = document.getElementById("servicesVisualName");
       const visualIndex = document.getElementById("servicesVisualStep");
 
       const setActiveService = (index) => {
         visualImgs.forEach((img) => img.classList.toggle("is-active", Number(img.dataset.index) === index));
-        visualSteps.forEach((s, i) => s.classList.toggle("is-active", i === index));
         if (visualName) visualName.textContent = serviceNames[index];
-        if (visualIndex) visualIndex.textContent = `0${index + 1} / 03`;
+        if (visualIndex) {
+          visualIndex.textContent = `0${index + 1}`;
+          visualIndex.classList.remove("is-pop");
+          void visualIndex.offsetWidth;
+          visualIndex.classList.add("is-pop");
+        }
       };
 
       const servicesIo = new IntersectionObserver((entries) => {
@@ -459,13 +462,12 @@ export default function Home() {
                   <img className="services-visual__img" data-index="1" src="/assets/img/service-bureaux.webp" alt="Bureaux & tertiaire" />
                   <img className="services-visual__img" data-index="2" src="/assets/img/service-particuliers.webp" alt="Particuliers & résidentiel" />
                   <div className="services-visual__overlay"></div>
-                  <div className="services-visual__steps">
-                    <span className="is-active"></span>
-                    <span></span>
-                    <span></span>
+                  <div className="services-visual__index">
+                    <span className="services-visual__index-num" id="servicesVisualStep">01</span>
+                    <span className="services-visual__index-total">/ 03</span>
                   </div>
                   <div className="services-visual__caption">
-                    <span className="services-visual__index" id="servicesVisualStep">01 / 03</span>
+                    <span className="services-visual__caption-bar"></span>
                     <span className="services-visual__name" id="servicesVisualName">Commerces &amp; devantures</span>
                   </div>
                 </div>

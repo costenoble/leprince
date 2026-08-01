@@ -391,25 +391,48 @@ p{margin:0;}
 .services-visual__img.is-active{opacity:1;}
 .services-visual__overlay{
   position:absolute;inset:0;
-  background:linear-gradient(180deg, rgba(7,32,29,0) 45%, rgba(7,32,29,.82) 100%);
+  background:
+    linear-gradient(180deg, rgba(7,32,29,.5) 0%, rgba(7,32,29,0) 30%, rgba(7,32,29,0) 55%, rgba(7,32,29,.85) 100%);
 }
-.services-visual__steps{
-  position:absolute;top:24px;left:24px;right:24px;
-  display:flex;gap:8px;
-}
-.services-visual__steps span{
-  flex:1;height:3px;border-radius:var(--radius-pill);
-  background:rgba(255,255,255,.3);
-  transition:background .3s;
-}
-.services-visual__steps span.is-active{background:#fff;}
-.services-visual__caption{
-  position:absolute;left:24px;right:24px;bottom:24px;
+.services-visual__index{
+  position:absolute;top:28px;left:28px;
+  display:flex;align-items:baseline;gap:8px;
   color:#fff;
-  display:flex;flex-direction:column;gap:6px;
+  font-family:'Anton',sans-serif;
+  font-weight:400;
 }
-.services-visual__index{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.05em;}
-.services-visual__name{font-size:clamp(1.3rem,2vw,1.6rem);font-weight:800;}
+.services-visual__index-num{
+  font-size:2.6rem;
+  line-height:1;
+  display:inline-block;
+}
+.services-visual__index-num.is-pop{animation:visualIndexPop .4s var(--ease);}
+@keyframes visualIndexPop{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.services-visual__index-total{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:700;
+  font-size:.95rem;
+  opacity:.55;
+  letter-spacing:.02em;
+}
+.services-visual__caption{
+  position:absolute;left:28px;right:28px;bottom:28px;
+  color:#fff;
+  display:flex;align-items:center;gap:14px;
+}
+.services-visual__caption-bar{
+  flex:none;
+  width:30px;height:3px;border-radius:var(--radius-pill);
+  background:var(--cta);
+}
+.services-visual__name{
+  font-size:clamp(1.25rem,2vw,1.6rem);
+  font-weight:800;
+  letter-spacing:-.01em;
+}
 
 .triptych__cards{display:flex;flex-direction:column;gap:36px;}
 .service-card{
