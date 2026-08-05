@@ -247,21 +247,57 @@ export default function Home() {
       cleanups.push(() => servicesIo.disconnect());
     }
 
-    /* ---------- realisations filter ---------- */
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const galleryItems = document.querySelectorAll(".gallery-item");
+    /* ---------- realisations : pinned horizontal scroller ---------- */
+    const realisationsScroller = document.getElementById("realisationsScroller");
+    const realisationsTrack = document.getElementById("realisationsTrack");
+    const realisationsCards = realisationsTrack ? realisationsTrack.querySelectorAll(".realisations-card") : [];
+    let realisationsTicking = false;
+    let cardStep = 0;
+    let firstCardCenter = 0;
 
-    filterBtns.forEach((btn) => {
-      on(btn, "click", () => {
-        filterBtns.forEach((b) => b.classList.remove("is-active"));
-        btn.classList.add("is-active");
-        const filter = btn.dataset.filter;
-        galleryItems.forEach((item) => {
-          const show = filter === "all" || item.dataset.cat === filter;
-          item.classList.toggle("is-hidden", !show);
+    function measureRealisations() {
+      if (!realisationsCards.length) return;
+      const trackStyle = getComputedStyle(realisationsTrack);
+      const gap = parseFloat(trackStyle.columnGap || trackStyle.gap || "0");
+      const cardWidth = realisationsCards[0].getBoundingClientRect().width;
+      cardStep = cardWidth + gap;
+      firstCardCenter = parseFloat(trackStyle.paddingLeft || "0") + cardWidth / 2;
+    }
+
+    function updateRealisationsProgress() {
+      const rect = realisationsScroller.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+      const maxTranslate = Math.max(0, realisationsTrack.scrollWidth - realisationsTrack.parentElement.clientWidth);
+      const translate = -progress * maxTranslate;
+      realisationsTrack.style.transform = `translateX(${translate}px)`;
+
+      if (cardStep > 0) {
+        const viewportCenter = window.innerWidth / 2;
+        realisationsCards.forEach((card, i) => {
+          const cardCenter = firstCardCenter + i * cardStep + translate;
+          const dist = Math.abs(cardCenter - viewportCenter);
+          const proximity = Math.max(0, 1 - dist / (cardStep * 1.1));
+          const scale = 0.85 + proximity * 0.15;
+          card.style.transform = `scale(${scale})`;
         });
-      });
-    });
+      }
+    }
+
+    if (realisationsScroller && realisationsTrack) {
+      const onRealisationsScroll = () => {
+        if (realisationsTicking) return;
+        realisationsTicking = true;
+        requestAnimationFrame(() => {
+          updateRealisationsProgress();
+          realisationsTicking = false;
+        });
+      };
+      measureRealisations();
+      on(window, "scroll", onRealisationsScroll, { passive: true });
+      on(window, "resize", () => { measureRealisations(); updateRealisationsProgress(); });
+      updateRealisationsProgress();
+    }
 
     /* ---------- animated stat counters ---------- */
     const statNums = document.querySelectorAll(".stat-tile__num");
@@ -562,45 +598,60 @@ export default function Home() {
         </section>
 
         <section className="section" id="realisations">
-          <div className="container realisations__head">
-            <div>
-              <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
-              <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
-            </div>
-            <div className="filters reveal" data-reveal aria-label="Filtrer les réalisations">
-              <button className="filter-btn is-active" data-filter="all">Tous</button>
-              <button className="filter-btn" data-filter="commerce">Commerces</button>
-              <button className="filter-btn" data-filter="bureau">Bureaux</button>
-              <button className="filter-btn" data-filter="particulier">Particuliers</button>
-            </div>
+          <div className="container">
+            <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
+            <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
+            <p className="lede reveal" data-reveal>Continuez à faire défiler pour parcourir nos chantiers récents.</p>
           </div>
 
-          <div className="gallery-strip-wrap container">
-            <div className="gallery-strip" id="galleryStrip">
-              <figure className="gallery-item" data-cat="commerce">
-                <img src="/assets/img/gallery-1.webp" alt="Nettoyage en hauteur d'une devanture" />
-                <figcaption>Devanture — accès difficile</figcaption>
-              </figure>
-              <figure className="gallery-item" data-cat="bureau">
-                <img src="/assets/img/gallery-2.webp" alt="Nacelle sur façade de bureaux" />
-                <figcaption>Bureaux — façade complète</figcaption>
-              </figure>
-              <figure className="gallery-item" data-cat="bureau">
-                <img src="/assets/img/gallery-3.webp" alt="Immeuble de bureaux vitré" />
-                <figcaption>Tertiaire — hall &amp; façade</figcaption>
-              </figure>
-              <div className="gallery-cta">
-                <p>Voir plus de<br />réalisations</p>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <div className="realisations-scroller" id="realisationsScroller">
+            <div className="realisations-scroller__sticky">
+              <div className="realisations-scroller__track" id="realisationsTrack">
+                <figure className="realisations-card">
+                  <img src="/assets/img/gallery-1.webp" alt="Nettoyage en hauteur d'une devanture" />
+                  <div className="realisations-card__overlay"></div>
+                  <figcaption>
+                    <span className="pill pill--tag">Commerce</span>
+                    <span className="realisations-card__title">Devanture — accès difficile</span>
+                  </figcaption>
+                </figure>
+                <figure className="realisations-card">
+                  <img src="/assets/img/gallery-2.webp" alt="Nacelle sur façade de bureaux" />
+                  <div className="realisations-card__overlay"></div>
+                  <figcaption>
+                    <span className="pill pill--tag">Bureaux</span>
+                    <span className="realisations-card__title">Bureaux — façade complète</span>
+                  </figcaption>
+                </figure>
+                <figure className="realisations-card">
+                  <img src="/assets/img/gallery-3.webp" alt="Immeuble de bureaux vitré" />
+                  <div className="realisations-card__overlay"></div>
+                  <figcaption>
+                    <span className="pill pill--tag">Bureaux</span>
+                    <span className="realisations-card__title">Tertiaire — hall &amp; façade</span>
+                  </figcaption>
+                </figure>
+                <figure className="realisations-card">
+                  <img src="/assets/img/gallery-4.webp" alt="Maison avec baies vitrées" />
+                  <div className="realisations-card__overlay"></div>
+                  <figcaption>
+                    <span className="pill pill--tag">Résidentiel</span>
+                    <span className="realisations-card__title">Résidentiel — véranda</span>
+                  </figcaption>
+                </figure>
+                <figure className="realisations-card">
+                  <img src="/assets/img/gallery-5.webp" alt="Technicien sur corde nettoyant une façade" />
+                  <div className="realisations-card__overlay"></div>
+                  <figcaption>
+                    <span className="pill pill--tag">Commerce</span>
+                    <span className="realisations-card__title">Commerce — accès sur corde</span>
+                  </figcaption>
+                </figure>
+                <div className="realisations-card realisations-card--cta">
+                  <p>Envie d&apos;un résultat comme celui-ci&nbsp;?</p>
+                  <a href="#devis" className="btn btn--light">Demander un devis →</a>
+                </div>
               </div>
-              <figure className="gallery-item" data-cat="particulier">
-                <img src="/assets/img/gallery-4.webp" alt="Maison avec baies vitrées" />
-                <figcaption>Résidentiel — véranda</figcaption>
-              </figure>
-              <figure className="gallery-item" data-cat="commerce">
-                <img src="/assets/img/gallery-5.webp" alt="Technicien sur corde nettoyant une façade" />
-                <figcaption>Commerce — accès sur corde</figcaption>
-              </figure>
             </div>
           </div>
 
