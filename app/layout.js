@@ -1,4 +1,7 @@
 import "./globals.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import FloatingWidgets from "./components/FloatingWidgets";
 
 export const metadata = {
   title: "Flash Net — Nettoyage de vitres pour professionnels & particuliers",
@@ -17,7 +20,12 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+        <FloatingWidgets />
+      </body>
     </html>
   );
 }

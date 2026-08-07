@@ -2,22 +2,6 @@
 
 import { useEffect } from "react";
 
-function waveLetters(text, stepMs = 160) {
-  let i = -1;
-  return text.split(" ").map((word, wi) => (
-    <span className="wave-word" key={wi}>
-      {word.split("").map((ch, ci) => {
-        i += 1;
-        return (
-          <span key={ci} style={{ transitionDelay: `${i * stepMs}ms` }}>
-            {ch}
-          </span>
-        );
-      })}
-    </span>
-  ));
-}
-
 function scrollRevealWords(segments) {
   let i = -1;
   return segments.flatMap((seg, si) =>
@@ -37,88 +21,11 @@ function scrollRevealWords(segments) {
 
 export default function Home() {
   useEffect(() => {
-    const loader = document.getElementById("loader");
-    const loaderWord = document.getElementById("loaderWord");
-    const navEl = document.querySelector(".nav");
-    const body = document.body;
-
-    if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-    window.scrollTo(0, 0);
-    body.style.overflow = "hidden";
-
-    const raf1 = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        loaderWord.classList.add("is-visible");
-      });
-    });
-
-    const revealDelay = 2400;
-    const hideTimer = setTimeout(() => {
-      loader.classList.add("is-hidden");
-      navEl.classList.add("is-loaded");
-      body.style.overflow = "";
-      window.scrollTo(0, 0);
-    }, revealDelay);
-
-    const removeTimer = setTimeout(() => {
-      loader.style.display = "none";
-    }, revealDelay + 950);
-
-    return () => {
-      cancelAnimationFrame(raf1);
-      clearTimeout(hideTimer);
-      clearTimeout(removeTimer);
-      body.style.overflow = "";
-    };
-  }, []);
-
-  useEffect(() => {
     const cleanups = [];
     const on = (target, type, handler, opts) => {
       target.addEventListener(type, handler, opts);
       cleanups.push(() => target.removeEventListener(type, handler, opts));
     };
-
-    /* ---------- navbar scroll state + mobile menu ---------- */
-    const navWrap = document.querySelector(".nav-wrap");
-    const burger = document.getElementById("burger");
-    const navMobile = document.getElementById("navMobile");
-
-    on(window, "scroll", () => {
-      navWrap.classList.toggle("is-scrolled", window.scrollY > 12);
-    }, { passive: true });
-
-    on(burger, "click", () => {
-      const isOpen = navMobile.classList.toggle("is-open");
-      burger.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    navMobile.querySelectorAll("a").forEach((a) => {
-      on(a, "click", () => {
-        navMobile.classList.remove("is-open");
-        burger.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    /* ---------- reveal on scroll ---------- */
-    const revealEls = document.querySelectorAll("[data-reveal]");
-    let revealIo;
-    if ("IntersectionObserver" in window) {
-      revealIo = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            revealIo.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
-      revealEls.forEach((el) => revealIo.observe(el));
-      cleanups.push(() => revealIo.disconnect());
-    } else {
-      revealEls.forEach((el) => el.classList.add("is-visible"));
-    }
 
     /* ---------- magnetic hero CTA badge ---------- */
     const magnetic = document.getElementById("magneticCta");
@@ -358,62 +265,11 @@ export default function Home() {
       });
     }
 
-    /* ---------- rdv floating widget ---------- */
-    const rdvWidget = document.getElementById("rdvWidget");
-    const rdvToggle = document.getElementById("rdvToggle");
-    const rdvPanel = document.getElementById("rdvPanel");
-    const rdvClose = document.getElementById("rdvClose");
-    const rdvDevisLink = document.getElementById("rdvDevisLink");
-
-    function openRdv() {
-      rdvPanel.hidden = false;
-      rdvWidget.classList.add("is-open");
-    }
-    function closeRdv() {
-      rdvPanel.hidden = true;
-      rdvWidget.classList.remove("is-open");
-    }
-    on(rdvToggle, "click", () => { rdvPanel.hidden ? openRdv() : closeRdv(); });
-    on(rdvClose, "click", closeRdv);
-    on(rdvDevisLink, "click", closeRdv);
-
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
   return (
     <>
-      <div className="loader" id="loader">
-        <div className="loader__word" id="loaderWord">
-          {waveLetters("FLASH NET")}
-        </div>
-      </div>
-
-      <header className="nav-wrap">
-        <nav className="nav" id="nav">
-          <a href="#top" className="nav__brand">
-            <span className="nav__mark">FN</span>
-            <span className="nav__word">Flash Net</span>
-          </a>
-          <ul className="nav__links">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#realisations">Réalisations</a></li>
-            <li><a href="#avis">Avis</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
-          <a href="#devis" className="btn btn--cta nav__cta">Demander un devis</a>
-          <button className="nav__burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-          </button>
-        </nav>
-        <div className="nav__mobile" id="navMobile">
-          <a href="#services">Services</a>
-          <a href="#realisations">Réalisations</a>
-          <a href="#avis">Avis</a>
-          <a href="#faq">FAQ</a>
-          <a href="#devis" className="btn btn--cta">Demander un devis</a>
-        </div>
-      </header>
-
       <main id="top">
         <section className="hero">
           <div className="hero__stage">
@@ -648,8 +504,8 @@ export default function Home() {
                   </figcaption>
                 </figure>
                 <div className="realisations-card realisations-card--cta">
-                  <p>Envie d&apos;un résultat comme celui-ci&nbsp;?</p>
-                  <a href="#devis" className="btn btn--light">Demander un devis →</a>
+                  <p>Envie de voir d&apos;autres chantiers&nbsp;?</p>
+                  <a href="/realisations" className="btn btn--light">Voir toutes nos réalisations →</a>
                 </div>
               </div>
             </div>
@@ -689,7 +545,7 @@ export default function Home() {
             <blockquote className="testimonial reveal" data-reveal>
               <div className="testimonial__stars">★★★★★</div>
               <p>« Devanture nickel toutes les deux semaines, ponctuels et discrets. Nos clients nous en parlent. »</p>
-              <cite>Camille D. — Commerçante, Lyon</cite>
+              <cite>Camille D. — Commerçante, Rennes</cite>
             </blockquote>
             <blockquote className="testimonial reveal" data-reveal style={{ "--delay": ".08s" }}>
               <div className="testimonial__stars">★★★★★</div>
@@ -853,92 +709,14 @@ export default function Home() {
                   <span className="accordion-icon"></span>
                 </button>
                 <div className="accordion-panel">
-                  <p>On intervient à Lyon et dans un rayon de 30&nbsp;km&nbsp;: Villeurbanne, Vénissieux, Caluire-et-Cuire,
-                    Bron, Écully, Oullins. Contactez-nous pour vérifier votre secteur.</p>
+                  <p>On intervient dans toute la Bretagne&nbsp;: Rennes, Brest, Quimper, Vannes, Saint-Malo, Lorient,
+                    Saint-Brieuc et leurs environs. Contactez-nous pour vérifier votre secteur.</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
-
-      <footer className="footer">
-        <div className="container footer__top">
-          <h2 className="footer__title">On révèle l&apos;éclat<br />de votre vitrine.</h2>
-
-          <div className="footer__cols">
-            <div className="footer__col">
-              <h4>Navigation</h4>
-              <a href="#services">Services</a>
-              <a href="#realisations">Réalisations</a>
-              <a href="#avis">Avis</a>
-              <a href="#faq">Foire aux questions</a>
-            </div>
-
-            <div className="footer__col">
-              <h4>Zone d&apos;intervention</h4>
-              <p className="footer__zone">Lyon, Villeurbanne, Vénissieux, Caluire-et-Cuire, Bron, Écully, Oullins</p>
-            </div>
-
-            <div className="footer__col">
-              <h4>Horaires</h4>
-              <p>Lun – Ven&nbsp;: 7h30 – 19h00</p>
-              <p>Samedi&nbsp;: 8h30 – 17h00</p>
-              <p>Dimanche&nbsp;: fermé (urgences sur demande)</p>
-            </div>
-
-            <div className="footer__col footer__col--contact">
-              <h4>On discute de votre projet ?</h4>
-              <a href="#devis" className="btn btn--light">Demander un devis</a>
-            </div>
-          </div>
-
-          <div className="footer__engagements">
-            <span>Produits écologiques</span>
-            <span>Assurance décennale</span>
-            <span>Satisfait ou repassé</span>
-            <span>Devis gratuit</span>
-          </div>
-        </div>
-
-        <div className="footer__wordmark" data-reveal aria-hidden="true">
-          {waveLetters("FLASH NET")}
-        </div>
-
-        <div className="container footer__bottom">
-          <p>© 2026 Flash Net — Site de démonstration. Tous droits réservés.</p>
-          <div className="footer__legal">
-            <a href="#">Mentions légales</a>
-            <a href="#">Politique de confidentialité</a>
-          </div>
-          <p className="footer__credit">Photos&nbsp;: Wikimedia Commons — usage démo</p>
-        </div>
-      </footer>
-
-      <a href="tel:+33600000000" className="call-fab" aria-label="Appeler">
-        <span className="call-fab__pulse"></span>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>
-      </a>
-
-      <div className="rdv-widget" id="rdvWidget">
-        <button className="rdv-widget__toggle" id="rdvToggle">
-          <span>Besoin d&apos;un devis rapide ?</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-        <div className="rdv-widget__panel" id="rdvPanel" hidden>
-          <div className="rdv-widget__head">
-            <div className="rdv-widget__avatar">FN</div>
-            <div>
-              <strong>Flash Net</strong>
-              <span>Répond généralement en 1h</span>
-            </div>
-            <button className="rdv-widget__close" id="rdvClose" aria-label="Fermer">✕</button>
-          </div>
-          <p>Un besoin urgent ou une question rapide&nbsp;? Appelez-nous ou passez directement au formulaire de devis.</p>
-          <a href="tel:+33600000000" className="btn btn--light btn--block">📞 06 00 00 00 00</a>
-          <a href="#devis" className="btn btn--cta btn--block" id="rdvDevisLink">Aller au formulaire de devis</a>
-        </div>
-      </div>
     </>
   );
 }
