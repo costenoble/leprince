@@ -19,13 +19,21 @@ export default function Header() {
     window.scrollTo(0, 0);
     body.style.overflow = "hidden";
 
+    const isFirstVisit = !sessionStorage.getItem("fn_visited");
+    sessionStorage.setItem("fn_visited", "1");
+    if (!isFirstVisit) {
+      loader.classList.add("is-fast");
+      navEl.classList.add("is-fast");
+    }
+
     const raf1 = requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         loaderWord.classList.add("is-visible");
       });
     });
 
-    const revealDelay = 2400;
+    const revealDelay = isFirstVisit ? 2400 : 700;
+    const curtainBuffer = isFirstVisit ? 950 : 450;
     const hideTimer = setTimeout(() => {
       loader.classList.add("is-hidden");
       navEl.classList.add("is-loaded");
@@ -35,7 +43,7 @@ export default function Header() {
 
     const removeTimer = setTimeout(() => {
       loader.style.display = "none";
-    }, revealDelay + 950);
+    }, revealDelay + curtainBuffer);
 
     /* ---------- navbar scroll state + mobile menu ---------- */
     const onScroll = () => {
