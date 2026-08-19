@@ -179,7 +179,7 @@ export default function RealisationsGallery() {
             <img id="lightboxImg" alt="" />
           </div>
           <div className="lightbox__info" id="lightboxInfo">
-            <span className="pill pill--tag" id="lightboxTag">Commerce</span>
+            <span className="lightbox__tag" id="lightboxTag">Commerce</span>
             <h3 id="lightboxTitle"></h3>
             <p id="lightboxDesc"></p>
             <a href="/#devis" className="link-cta">Demander un devis pour un projet similaire →</a>

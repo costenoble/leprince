@@ -653,6 +653,7 @@ p{margin:0;}
   padding:48px;display:flex;flex-direction:column;justify-content:center;gap:18px;
   box-shadow:var(--shadow-soft);
 }
+.lightbox__tag{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--teal-600);}
 .lightbox__info h3{font-size:clamp(1.4rem,2.4vw,1.8rem);font-weight:800;letter-spacing:-.01em;}
 .lightbox__info p{color:var(--ink-soft);line-height:1.65;}
 .lightbox__close{
