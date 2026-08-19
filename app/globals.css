@@ -158,8 +158,10 @@ p{margin:0;}
   position:fixed;top:16px;left:0;right:0;z-index:100;
   display:flex;flex-direction:column;align-items:center;
   padding:0 20px;
+  pointer-events:none;
 }
 .nav{
+  pointer-events:auto;
   width:100%;max-width:var(--container);
   display:flex;align-items:center;justify-content:space-between;
   background:rgba(255,255,255,.88);
