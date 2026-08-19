@@ -145,7 +145,6 @@ export default function Header() {
           <ul className="nav__links">
             <li><a href="/#services">Services</a></li>
             <li><a href="/realisations">Réalisations</a></li>
-            <li><a href="/#avis">Avis</a></li>
             <li><a href="/#faq">FAQ</a></li>
           </ul>
           <a href="/#devis" className="btn btn--cta nav__cta">Demander un devis</a>
@@ -156,7 +155,6 @@ export default function Header() {
         <div className="nav__mobile" id="navMobile">
           <a href="/#services">Services</a>
           <a href="/realisations">Réalisations</a>
-          <a href="/#avis">Avis</a>
           <a href="/#faq">FAQ</a>
           <a href="/#devis" className="btn btn--cta">Demander un devis</a>
         </div>

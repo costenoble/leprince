@@ -270,21 +270,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="marquee">
-            <div className="marquee__track">
-              <span>★ 4.9/5 sur Google (120 avis)</span>
-              <span>Assurance décennale</span>
-              <span>Produits 100% écologiques</span>
-              <span>Devis gratuit sous 24h</span>
-              <span>Satisfait ou repassé gratuitement</span>
-              <span>★ 4.9/5 sur Google (120 avis)</span>
-              <span>Assurance décennale</span>
-              <span>Produits 100% écologiques</span>
-              <span>Devis gratuit sous 24h</span>
-              <span>Satisfait ou repassé gratuitement</span>
-            </div>
-          </div>
         </section>
 
         <section className="section" id="services">
@@ -473,7 +458,7 @@ export default function Home() {
                   </figcaption>
                 </figure>
                 <div className="realisations-card realisations-card--cta">
-                  <p>Envie de voir d&apos;autres chantiers&nbsp;?</p>
+                  <p>Envie de voir<br />d&apos;autres chantiers&nbsp;?</p>
                   <a href="/realisations" className="btn btn--light btn--lg">Voir toutes nos réalisations →</a>
                 </div>
               </div>
@@ -502,30 +487,6 @@ export default function Home() {
                 <span className="stat-tile__label">Produits écologiques</span>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="section" id="avis">
-          <div className="container">
-            <span className="pill pill--eyebrow reveal" data-reveal>Avis clients</span>
-            <h2 className="h2 reveal" data-reveal>Ce qu&apos;on nous dit après le passage</h2>
-          </div>
-          <div className="container testimonials">
-            <blockquote className="testimonial reveal" data-reveal>
-              <div className="testimonial__stars">★★★★★</div>
-              <p>« Devanture nickel toutes les deux semaines, ponctuels et discrets. Nos clients nous en parlent. »</p>
-              <cite>Camille D. — Commerçante, Rennes</cite>
-            </blockquote>
-            <blockquote className="testimonial reveal" data-reveal style={{ "--delay": ".08s" }}>
-              <div className="testimonial__stars">★★★★★</div>
-              <p>« On a signé un contrat trimestriel pour nos bureaux. Résultat impeccable, devis très clair. »</p>
-              <cite>Julien M. — Directeur d&apos;agence</cite>
-            </blockquote>
-            <blockquote className="testimonial reveal" data-reveal style={{ "--delay": ".16s" }}>
-              <div className="testimonial__stars">★★★★★</div>
-              <p>« Notre véranda était difficile d&apos;accès, ils avaient le bon matériel. Sans une trace derrière eux. »</p>
-              <cite>Sophie &amp; Marc — Particuliers</cite>
-            </blockquote>
           </div>
         </section>
 
