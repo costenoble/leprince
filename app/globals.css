@@ -778,7 +778,7 @@ p{margin:0;}
 /* ============================================================
    FOOTER
    ============================================================ */
-.footer{background:var(--teal-900);color:#fff;position:relative;overflow:hidden;padding-top:90px;}
+.footer{background:var(--teal-900);color:#fff;position:relative;overflow:hidden;padding-top:90px;border-radius:15px 15px 0 0;}
 .footer__title{
   font-size:clamp(2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em;margin-bottom:60px;
 }

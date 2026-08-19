@@ -13,11 +13,30 @@ export default function Header() {
     const navMobile = document.getElementById("navMobile");
     const body = document.body;
 
-    if (window.location.hash) {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    const navEntries = performance.getEntriesByType("navigation");
+    const isReload = navEntries.length ? navEntries[0].type === "reload" : false;
+    const targetHash = window.location.hash;
+
+    if (isReload && targetHash) {
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
     window.scrollTo(0, 0);
     body.style.overflow = "hidden";
+
+    const applyScrollDecision = () => {
+      if (!isReload && targetHash) {
+        const target = document.querySelector(targetHash);
+        if (target) {
+          target.scrollIntoView({ block: "start" });
+          return;
+        }
+      }
+      window.scrollTo(0, 0);
+    };
 
     const isFirstVisit = !sessionStorage.getItem("fn_visited");
     sessionStorage.setItem("fn_visited", "1");
@@ -38,8 +57,13 @@ export default function Header() {
       loader.classList.add("is-hidden");
       navEl.classList.add("is-loaded");
       body.style.overflow = "";
-      window.scrollTo(0, 0);
+      applyScrollDecision();
     }, revealDelay);
+
+    // Late-loading images can shift layout after the initial scroll; re-apply
+    // the same decision once everything has finished loading.
+    const onLoad = () => applyScrollDecision();
+    window.addEventListener("load", onLoad);
 
     const removeTimer = setTimeout(() => {
       loader.style.display = "none";
@@ -89,6 +113,7 @@ export default function Header() {
       clearTimeout(hideTimer);
       clearTimeout(removeTimer);
       body.style.overflow = "";
+      window.removeEventListener("load", onLoad);
       window.removeEventListener("scroll", onScroll);
       burger.removeEventListener("click", onBurgerClick);
       mobileLinkHandlers.forEach(([a, handler]) => a.removeEventListener("click", handler));
