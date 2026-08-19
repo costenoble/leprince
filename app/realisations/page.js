@@ -1,18 +1,9 @@
+import RealisationsGallery from "./RealisationsGallery";
+
 export const metadata = {
   title: "Nos réalisations — Flash Net",
   description: "Un aperçu de nos chantiers de nettoyage de vitres : commerces, bureaux et particuliers en Bretagne.",
 };
-
-const projects = [
-  { img: "gallery-1.webp", cat: "Commerce", title: "Devanture en centre-ville" },
-  { img: "gallery-2.webp", cat: "Bureaux", title: "Façade complète d'un immeuble tertiaire" },
-  { img: "gallery-3.webp", cat: "Bureaux", title: "Hall d'entrée et façade vitrée" },
-  { img: "gallery-4.webp", cat: "Résidentiel", title: "Véranda et baies vitrées" },
-  { img: "gallery-5.webp", cat: "Commerce", title: "Intervention en accès sur corde" },
-  { img: "service-commerces.webp", cat: "Commerce", title: "Vitrine de centre commercial" },
-  { img: "service-bureaux.webp", cat: "Bureaux", title: "Nettoyage de tour de bureaux" },
-  { img: "service-particuliers.webp", cat: "Résidentiel", title: "Maison avec grandes baies vitrées" },
-];
 
 export default function Realisations() {
   return (
@@ -27,18 +18,7 @@ export default function Realisations() {
         </div>
 
         <div className="container">
-          <div className="realisations-grid">
-            {projects.map((p, i) => (
-              <figure className="realisations-grid-card reveal" data-reveal style={{ "--delay": `${(i % 3) * 0.08}s` }} key={i}>
-                <img src={`/assets/img/${p.img}`} alt={p.title} />
-                <div className="realisations-grid-card__overlay"></div>
-                <figcaption>
-                  <span className="pill pill--tag">{p.cat}</span>
-                  <span className="realisations-grid-card__title">{p.title}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <RealisationsGallery />
         </div>
       </section>
 
