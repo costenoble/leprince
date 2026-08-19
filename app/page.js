@@ -505,7 +505,7 @@ export default function Home() {
                 </figure>
                 <div className="realisations-card realisations-card--cta">
                   <p>Envie de voir d&apos;autres chantiers&nbsp;?</p>
-                  <a href="/realisations" className="btn btn--light">Voir toutes nos réalisations →</a>
+                  <a href="/realisations" className="btn btn--light btn--lg">Voir toutes nos réalisations →</a>
                 </div>
               </div>
             </div>
