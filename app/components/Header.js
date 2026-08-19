@@ -32,6 +32,10 @@ export default function Header() {
         const target = document.querySelector(targetHash);
         if (target) {
           target.scrollIntoView({ block: "start" });
+          // Jumping straight to a section shouldn't leave its content waiting
+          // on the scroll-triggered fade-in; reveal it immediately.
+          if (target.matches("[data-reveal]")) target.classList.add("is-visible");
+          target.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("is-visible"));
           return;
         }
       }
@@ -58,6 +62,7 @@ export default function Header() {
       navEl.classList.add("is-loaded");
       body.style.overflow = "";
       applyScrollDecision();
+      window.dispatchEvent(new CustomEvent("fn:curtain-lifted"));
     }, revealDelay);
 
     // Late-loading images can shift layout after the initial scroll; re-apply
@@ -77,6 +82,7 @@ export default function Header() {
 
     const onBurgerClick = () => {
       const isOpen = navMobile.classList.toggle("is-open");
+      burger.classList.toggle("is-active", isOpen);
       burger.setAttribute("aria-expanded", String(isOpen));
     };
     burger.addEventListener("click", onBurgerClick);
@@ -85,6 +91,7 @@ export default function Header() {
     navMobile.querySelectorAll("a").forEach((a) => {
       const handler = () => {
         navMobile.classList.remove("is-open");
+        burger.classList.remove("is-active");
         burger.setAttribute("aria-expanded", "false");
       };
       a.addEventListener("click", handler);

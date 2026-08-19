@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { waveLetters } from "./lib/waveLetters";
 
 function scrollRevealWords(segments) {
   let i = -1;
@@ -27,35 +28,11 @@ export default function Home() {
       cleanups.push(() => target.removeEventListener(type, handler, opts));
     };
 
-    /* ---------- magnetic hero CTA badge ---------- */
-    const magnetic = document.getElementById("magneticCta");
-    if (magnetic) {
-      const stage = document.querySelector(".hero__stage");
-      let raf = null;
-      const onStageMove = (e) => {
-        const rect = magnetic.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.hypot(dx, dy);
-        const radius = 180;
-        if (dist < radius) {
-          const strength = (1 - dist / radius) * 0.35;
-          if (raf) cancelAnimationFrame(raf);
-          raf = requestAnimationFrame(() => {
-            magnetic.style.transform = `translateY(-50%) translate(${dx * strength}px, ${dy * strength}px)`;
-          });
-        } else {
-          magnetic.style.transform = "translateY(-50%)";
-        }
-      };
-      const onStageLeave = () => {
-        magnetic.style.transform = "translateY(-50%)";
-      };
-      on(stage, "mousemove", onStageMove);
-      on(stage, "mouseleave", onStageLeave);
-      cleanups.push(() => { if (raf) cancelAnimationFrame(raf); });
+    /* ---------- hero wordmark wave, synced to the curtain lift ---------- */
+    const heroWordmark = document.querySelector(".hero__wordmark");
+    if (heroWordmark) {
+      const onCurtainLifted = () => heroWordmark.classList.add("is-visible");
+      on(window, "fn:curtain-lifted", onCurtainLifted);
     }
 
     /* ---------- before / after slider ---------- */
@@ -280,32 +257,15 @@ export default function Home() {
 
             <div className="hero__inner container">
               <div className="hero__badges">
-                <span className="pill pill--light rotate-l reveal" data-reveal>Nettoyage de vitres professionnel</span>
-                <span className="pill pill--cta rotate-r reveal" data-reveal style={{ "--delay": ".12s" }}>Pros &amp; Particuliers</span>
+                <span className="pill pill--light rotate-l reveal" data-reveal>Nettoyage de vitres &middot; Pros &amp; Particuliers</span>
               </div>
 
-              <div className="hero__wordmark-wrap">
-                <h1 className="hero__wordmark reveal" data-reveal style={{ "--delay": ".05s" }}>FLASH NET</h1>
-                <button className="hero__badge-cta magnetic" id="magneticCta">
-                  <span>Obtenir mon<br />devis gratuit</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </button>
-              </div>
+              <h1 className="hero__wordmark">{waveLetters("FLASH NET")}</h1>
 
               <div className="hero__bottom">
                 <h2 className="hero__tagline reveal" data-reveal>Des vitres impeccables pour une image irréprochable.</h2>
-                <div className="hero__desc-actions">
-                  <p className="hero__desc reveal" data-reveal>
-                    Vitrines, bureaux, baies vitrées, vérandas&nbsp;: on s&apos;occupe de vos vitres avec du matériel professionnel
-                    et des produits écologiques. Devis gratuit sous 24h, pour les professionnels comme pour les particuliers.
-                  </p>
-                  <div className="hero__actions reveal" data-reveal>
-                    <a href="#devis" className="btn btn--cta btn--lg">Demander un devis gratuit</a>
-                    <a href="tel:+33600000000" className="btn btn--ghost btn--lg">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" /></svg>
-                      Appeler maintenant
-                    </a>
-                  </div>
+                <div className="hero__actions reveal" data-reveal>
+                  <a href="#devis" className="btn btn--cta btn--lg">Demander un devis gratuit</a>
                 </div>
               </div>
             </div>
@@ -369,6 +329,9 @@ export default function Home() {
             <div className="triptych__cards">
               <article className="service-card reveal" data-reveal data-service-index="0">
                 <span className="pill pill--tag">Devantures &amp; Commerces</span>
+                <div className="service-card__mobile-img">
+                  <img src="/assets/img/service-commerces.webp" alt="Commerces & devantures" />
+                </div>
                 <h3>Commerces &amp; devantures</h3>
                 <p>Vitrines, devantures, enseignes lumineuses&nbsp;: la première image de votre commerce mérite d&apos;être irréprochable. Passage tôt le matin, sans gêner votre activité.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre commerces →</a>
@@ -376,6 +339,9 @@ export default function Home() {
 
               <article className="service-card reveal" data-reveal data-service-index="1">
                 <span className="pill pill--tag">Bureaux &amp; Tertiaire</span>
+                <div className="service-card__mobile-img">
+                  <img src="/assets/img/service-bureaux.webp" alt="Bureaux & tertiaire" />
+                </div>
                 <h3>Bureaux &amp; tertiaire</h3>
                 <p>Halls d&apos;entrée, open spaces, façades vitrées&nbsp;: un cadre de travail impeccable qui valorise votre entreprise auprès de vos clients. Contrats mensuels ou trimestriels.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre bureaux →</a>
@@ -383,6 +349,9 @@ export default function Home() {
 
               <article className="service-card reveal" data-reveal data-service-index="2">
                 <span className="pill pill--tag">Particuliers &amp; Résidentiel</span>
+                <div className="service-card__mobile-img">
+                  <img src="/assets/img/service-particuliers.webp" alt="Particuliers & résidentiel" />
+                </div>
                 <h3>Particuliers &amp; résidentiel</h3>
                 <p>Baies vitrées, vérandas, fenêtres en hauteur ou difficiles d&apos;accès&nbsp;: on s&apos;occupe de tout, avec du matériel adapté et sans traces.</p>
                 <a href="#devis" className="link-cta">Découvrir l&apos;offre particuliers →</a>
