@@ -373,6 +373,7 @@ export default function Home() {
                 <li>100% biodégradable</li>
                 <li>Eau filtrée</li>
               </ul>
+              <a href="#devis" className="btn btn--cta">Demander mon devis</a>
             </div>
             <div className="feature__media reveal" data-reveal style={{ "--delay": ".1s" }}>
               <span className="pill pill--tag feature__tag">Particuliers</span>
