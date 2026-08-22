@@ -9,8 +9,6 @@ export default function Header() {
     const loaderWord = document.getElementById("loaderWord");
     const navEl = document.querySelector(".nav");
     const navWrap = document.querySelector(".nav-wrap");
-    const burger = document.getElementById("burger");
-    const navMobile = document.getElementById("navMobile");
     const body = document.body;
 
     if ("scrollRestoration" in window.history) {
@@ -74,29 +72,11 @@ export default function Header() {
       loader.style.display = "none";
     }, revealDelay + curtainBuffer);
 
-    /* ---------- navbar scroll state + mobile menu ---------- */
+    /* ---------- navbar scroll state ---------- */
     const onScroll = () => {
       navWrap.classList.toggle("is-scrolled", window.scrollY > 12);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    const onBurgerClick = () => {
-      const isOpen = navMobile.classList.toggle("is-open");
-      burger.classList.toggle("is-active", isOpen);
-      burger.setAttribute("aria-expanded", String(isOpen));
-    };
-    burger.addEventListener("click", onBurgerClick);
-
-    const mobileLinkHandlers = [];
-    navMobile.querySelectorAll("a").forEach((a) => {
-      const handler = () => {
-        navMobile.classList.remove("is-open");
-        burger.classList.remove("is-active");
-        burger.setAttribute("aria-expanded", "false");
-      };
-      a.addEventListener("click", handler);
-      mobileLinkHandlers.push([a, handler]);
-    });
 
     /* ---------- reveal on scroll (site-wide) ---------- */
     const revealEls = document.querySelectorAll("[data-reveal]");
@@ -122,8 +102,6 @@ export default function Header() {
       body.style.overflow = "";
       window.removeEventListener("load", onLoad);
       window.removeEventListener("scroll", onScroll);
-      burger.removeEventListener("click", onBurgerClick);
-      mobileLinkHandlers.forEach(([a, handler]) => a.removeEventListener("click", handler));
       if (revealIo) revealIo.disconnect();
     };
   }, []);
@@ -142,22 +120,8 @@ export default function Header() {
             <span className="nav__mark">FN</span>
             <span className="nav__word">Flash Net</span>
           </a>
-          <ul className="nav__links">
-            <li><a href="/#services">Services</a></li>
-            <li><a href="/realisations">Réalisations</a></li>
-            <li><a href="/#faq">FAQ</a></li>
-          </ul>
           <a href="/#devis" className="btn btn--cta nav__cta">Demander un devis</a>
-          <button className="nav__burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-          </button>
         </nav>
-        <div className="nav__mobile" id="navMobile">
-          <a href="/#services">Services</a>
-          <a href="/realisations">Réalisations</a>
-          <a href="/#faq">FAQ</a>
-          <a href="/#devis" className="btn btn--cta">Demander un devis</a>
-        </div>
       </header>
     </>
   );
