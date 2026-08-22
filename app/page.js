@@ -466,10 +466,20 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="container feature__grid feature__grid--identity">
+            <div className="feature__text reveal" data-reveal>
+              <span className="pill pill--eyebrow">Qui sommes-nous</span>
+              <h2 className="h2">Une affaire de famille, ancrée en Bretagne.</h2>
+              <p>Flash Net est une entreprise familiale bretonne, sans franchise ni investisseurs&nbsp;: juste une équipe qui soigne chaque chantier depuis 2011, de Saint-Malo à Quimper.</p>
+            </div>
+            <div className="feature__media reveal" data-reveal style={{ "--delay": ".1s" }}>
+              <img src="/assets/img/saint-malo.webp" alt="Bord de mer et façades bretonnes à Saint-Malo" />
+            </div>
+          </div>
+
           <div className="stats container">
             <div className="stats__title">
               <h2 className="h2 reveal" data-reveal>Les chiffres qui <span className="text-accent">parlent pour nous</span></h2>
-              <p className="lede reveal" data-reveal style={{ "--delay": ".06s" }}>Flash Net est une entreprise familiale bretonne, sans franchise ni investisseurs&nbsp;: juste une équipe qui soigne chaque chantier depuis 2011.</p>
             </div>
             <div className="stats__grid">
               <div className="stat-tile reveal" data-reveal>
