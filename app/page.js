@@ -469,6 +469,7 @@ export default function Home() {
           <div className="stats container">
             <div className="stats__title">
               <h2 className="h2 reveal" data-reveal>Les chiffres qui <span className="text-accent">parlent pour nous</span></h2>
+              <p className="lede reveal" data-reveal style={{ "--delay": ".06s" }}>Flash Net est une entreprise familiale bretonne, sans franchise ni investisseurs&nbsp;: juste une équipe qui soigne chaque chantier depuis 2011.</p>
             </div>
             <div className="stats__grid">
               <div className="stat-tile reveal" data-reveal>
@@ -476,8 +477,8 @@ export default function Home() {
                 <span className="stat-tile__label">Vitrines nettoyées / an</span>
               </div>
               <div className="stat-tile reveal" data-reveal style={{ "--delay": ".08s" }}>
-                <span className="stat-tile__num" data-count="4.9" data-decimal="1" data-suffix="/5">0</span>
-                <span className="stat-tile__label">Note moyenne Google</span>
+                <span className="stat-tile__num" data-count="15" data-suffix=" ans">0</span>
+                <span className="stat-tile__label">D&apos;expérience</span>
               </div>
               <div className="stat-tile reveal" data-reveal style={{ "--delay": ".16s" }}>
                 <span className="stat-tile__num" data-count="24" data-suffix="h">0</span>

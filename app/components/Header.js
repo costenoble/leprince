@@ -95,6 +95,33 @@ export default function Header() {
       revealEls.forEach((el) => el.classList.add("is-visible"));
     }
 
+    /* ---------- animated stat counters ---------- */
+    const statNums = document.querySelectorAll(".stat-tile__num");
+    let statIo;
+    if (statNums.length && "IntersectionObserver" in window) {
+      statIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseFloat(el.dataset.count);
+          const decimals = parseInt(el.dataset.decimal || "0", 10);
+          const suffix = el.dataset.suffix || "";
+          const duration = 1400;
+          const start = performance.now();
+          function tick(now) {
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = target * eased;
+            el.textContent = value.toFixed(decimals) + suffix;
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          statIo.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      statNums.forEach((el) => statIo.observe(el));
+    }
+
     return () => {
       cancelAnimationFrame(raf1);
       clearTimeout(hideTimer);
@@ -103,6 +130,7 @@ export default function Header() {
       window.removeEventListener("load", onLoad);
       window.removeEventListener("scroll", onScroll);
       if (revealIo) revealIo.disconnect();
+      if (statIo) statIo.disconnect();
     };
   }, []);
 
