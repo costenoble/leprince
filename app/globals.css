@@ -186,8 +186,8 @@ p{margin:0;}
 }
 .nav__word{font-size:1.05rem;letter-spacing:-.01em;}
 .nav__actions{display:flex;align-items:center;gap:10px;}
-.btn--ghost{background:var(--teal-100);color:var(--teal-700);}
-.btn--ghost:hover{background:var(--teal-700);color:#fff;}
+.nav__link{background:transparent;color:var(--teal-700);border:1.5px solid var(--teal-700);}
+.nav__link:hover{background:var(--teal-700);color:#fff;}
 .nav__link,.nav__cta{padding:11px 22px;font-size:.88rem;}
 
 @media (max-width:560px){

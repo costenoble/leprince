@@ -149,7 +149,7 @@ export default function Header() {
             <span className="nav__word">Flash Net</span>
           </a>
           <div className="nav__actions">
-            <a href="/realisations" className="btn btn--ghost nav__link">Réalisations</a>
+            <a href="/realisations" className="btn nav__link">Réalisations</a>
             <a href="/#devis" className="btn btn--cta nav__cta">Demander un devis</a>
           </div>
         </nav>
