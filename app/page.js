@@ -131,58 +131,6 @@ export default function Home() {
       cleanups.push(() => servicesIo.disconnect());
     }
 
-    /* ---------- realisations : pinned horizontal scroller ---------- */
-    const realisationsScroller = document.getElementById("realisationsScroller");
-    const realisationsTrack = document.getElementById("realisationsTrack");
-    const realisationsCards = realisationsTrack ? realisationsTrack.querySelectorAll(".realisations-card") : [];
-    let realisationsTicking = false;
-    let cardStep = 0;
-    let firstCardCenter = 0;
-
-    function measureRealisations() {
-      if (!realisationsCards.length) return;
-      const trackStyle = getComputedStyle(realisationsTrack);
-      const gap = parseFloat(trackStyle.columnGap || trackStyle.gap || "0");
-      const cardWidth = realisationsCards[0].getBoundingClientRect().width;
-      cardStep = cardWidth + gap;
-      firstCardCenter = parseFloat(trackStyle.paddingLeft || "0") + cardWidth / 2;
-    }
-
-    function updateRealisationsProgress() {
-      const rect = realisationsScroller.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
-      const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
-      const maxTranslate = Math.max(0, realisationsTrack.scrollWidth - realisationsTrack.parentElement.clientWidth);
-      const translate = -progress * maxTranslate;
-      realisationsTrack.style.transform = `translateX(${translate}px)`;
-
-      if (cardStep > 0) {
-        const viewportCenter = window.innerWidth / 2;
-        realisationsCards.forEach((card, i) => {
-          const cardCenter = firstCardCenter + i * cardStep + translate;
-          const dist = Math.abs(cardCenter - viewportCenter);
-          const proximity = Math.max(0, 1 - dist / (cardStep * 1.1));
-          const scale = 0.85 + proximity * 0.15;
-          card.style.transform = `scale(${scale})`;
-        });
-      }
-    }
-
-    if (realisationsScroller && realisationsTrack) {
-      const onRealisationsScroll = () => {
-        if (realisationsTicking) return;
-        realisationsTicking = true;
-        requestAnimationFrame(() => {
-          updateRealisationsProgress();
-          realisationsTicking = false;
-        });
-      };
-      measureRealisations();
-      on(window, "scroll", onRealisationsScroll, { passive: true });
-      on(window, "resize", () => { measureRealisations(); updateRealisationsProgress(); });
-      updateRealisationsProgress();
-    }
-
     /* ---------- animated stat counters ---------- */
     const statNums = document.querySelectorAll(".stat-tile__num");
     let statIo;
