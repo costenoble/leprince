@@ -150,7 +150,10 @@ export default function Header() {
           </a>
           <div className="nav__actions">
             <a href="/realisations" className="btn nav__link">Réalisations</a>
-            <a href="/#devis" className="btn btn--cta nav__cta">Demander un devis</a>
+            <a href="/#devis" className="btn btn--cta nav__cta">
+              <span className="nav__cta-full">Demander un devis</span>
+              <span className="nav__cta-short">Devis</span>
+            </a>
           </div>
         </nav>
       </header>

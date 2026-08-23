@@ -189,11 +189,16 @@ p{margin:0;}
 .nav__link{background:transparent;color:var(--teal-700);border:1.5px solid var(--teal-700);}
 .nav__link:hover{background:var(--teal-700);color:#fff;}
 .nav__link,.nav__cta{padding:11px 22px;font-size:.88rem;}
+.nav__cta-short{display:none;}
 
 @media (max-width:560px){
   .nav__word{display:none;}
 }
-@media (max-width:420px){
+@media (max-width:480px){
+  .nav__cta-full{display:none;}
+  .nav__cta-short{display:inline;}
+}
+@media (max-width:340px){
   .nav__link{display:none;}
 }
 
