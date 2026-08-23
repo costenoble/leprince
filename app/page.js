@@ -131,39 +131,43 @@ export default function Home() {
       cleanups.push(() => servicesIo.disconnect());
     }
 
-    /* ---------- realisations : coverflow-style stack, navigated by click only (no scroll-linking of any kind) ---------- */
-    const realisationsDeck = document.getElementById("realisationsDeck");
-    const realisationsPrev = document.getElementById("realisationsPrev");
-    const realisationsNext = document.getElementById("realisationsNext");
-    if (realisationsDeck) {
-      let order = Array.from(realisationsDeck.querySelectorAll("[data-stack-card]"));
+    /* ---------- realisations : drag-to-scroll (desktop mouse only, touch/trackpad already scroll natively) ---------- */
+    const realisationsTrack = document.getElementById("realisationsTrack");
+    if (realisationsTrack) {
+      let isDragging = false;
+      let hasMoved = false;
+      let startX = 0;
+      let startScrollLeft = 0;
 
-      function applyStackOrder() {
-        order.forEach((card, i) => {
-          const pos = i === 0 ? "center" : i === 1 ? "right" : i === order.length - 1 ? "left" : "hidden";
-          card.dataset.pos = pos;
-        });
-      }
+      const onPointerDown = (e) => {
+        if (e.pointerType !== "mouse") return;
+        isDragging = true;
+        hasMoved = false;
+        startX = e.clientX;
+        startScrollLeft = realisationsTrack.scrollLeft;
+        realisationsTrack.classList.add("is-dragging");
+      };
+      const onPointerMove = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) hasMoved = true;
+        realisationsTrack.scrollLeft = startScrollLeft - dx;
+      };
+      const endDrag = () => {
+        isDragging = false;
+        realisationsTrack.classList.remove("is-dragging");
+      };
+      const onClickCapture = (e) => {
+        if (hasMoved) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
 
-      function next() {
-        order = [...order.slice(1), order[0]];
-        applyStackOrder();
-      }
-      function prev() {
-        order = [order[order.length - 1], ...order.slice(0, -1)];
-        applyStackOrder();
-      }
-
-      applyStackOrder();
-      if (realisationsNext) on(realisationsNext, "click", next);
-      if (realisationsPrev) on(realisationsPrev, "click", prev);
-      order.forEach((card) => {
-        on(card, "click", () => {
-          const pos = card.dataset.pos;
-          if (pos === "left") prev();
-          if (pos === "right") next();
-        });
-      });
+      on(realisationsTrack, "pointerdown", onPointerDown);
+      on(window, "pointermove", onPointerMove);
+      on(window, "pointerup", endDrag);
+      on(realisationsTrack, "click", onClickCapture, true);
     }
 
     /* ---------- animated stat counters ---------- */
@@ -392,24 +396,15 @@ export default function Home() {
         </section>
 
         <section className="section" id="realisations">
-          <div className="container realisations-stack">
-            <div className="realisations-stack__text">
-              <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
-              <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
-              <p className="lede reveal" data-reveal>Cliquez sur les flèches, ou directement sur une photo, pour découvrir nos chantiers récents.</p>
-              <div className="realisations-stack__nav reveal" data-reveal>
-                <button type="button" className="realisations-stack__arrow" id="realisationsPrev" aria-label="Photo précédente">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </button>
-                <button type="button" className="realisations-stack__arrow" id="realisationsNext" aria-label="Photo suivante">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </button>
-              </div>
-              <a href="/realisations" className="link-cta realisations-stack__link">Voir toutes nos réalisations →</a>
-            </div>
+          <div className="container">
+            <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
+            <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
+            <p className="lede reveal" data-reveal>Faites glisser pour parcourir nos chantiers récents.</p>
+          </div>
 
-            <div className="realisations-stack__deck" id="realisationsDeck">
-              <figure className="realisations-stack__card" data-stack-card>
+          <div className="realisations-scroller" id="realisationsScroller">
+            <div className="realisations-scroller__track" id="realisationsTrack">
+              <figure className="realisations-card">
                 <img src="/assets/img/gallery-1.webp" alt="Nettoyage en hauteur d'une devanture" draggable="false" />
                 <div className="realisations-card__overlay"></div>
                 <figcaption>
@@ -417,7 +412,7 @@ export default function Home() {
                   <span className="realisations-card__title">Devanture — accès difficile</span>
                 </figcaption>
               </figure>
-              <figure className="realisations-stack__card" data-stack-card>
+              <figure className="realisations-card">
                 <img src="/assets/img/gallery-2.webp" alt="Nacelle sur façade de bureaux" draggable="false" />
                 <div className="realisations-card__overlay"></div>
                 <figcaption>
@@ -425,7 +420,7 @@ export default function Home() {
                   <span className="realisations-card__title">Bureaux — façade complète</span>
                 </figcaption>
               </figure>
-              <figure className="realisations-stack__card" data-stack-card>
+              <figure className="realisations-card">
                 <img src="/assets/img/gallery-3.webp" alt="Immeuble de bureaux vitré" draggable="false" />
                 <div className="realisations-card__overlay"></div>
                 <figcaption>
@@ -433,7 +428,7 @@ export default function Home() {
                   <span className="realisations-card__title">Tertiaire — hall &amp; façade</span>
                 </figcaption>
               </figure>
-              <figure className="realisations-stack__card" data-stack-card>
+              <figure className="realisations-card">
                 <img src="/assets/img/gallery-4.webp" alt="Maison avec baies vitrées" draggable="false" />
                 <div className="realisations-card__overlay"></div>
                 <figcaption>
@@ -441,7 +436,7 @@ export default function Home() {
                   <span className="realisations-card__title">Résidentiel — véranda</span>
                 </figcaption>
               </figure>
-              <figure className="realisations-stack__card" data-stack-card>
+              <figure className="realisations-card">
                 <img src="/assets/img/gallery-5.webp" alt="Technicien sur corde nettoyant une façade" draggable="false" />
                 <div className="realisations-card__overlay"></div>
                 <figcaption>
@@ -449,6 +444,10 @@ export default function Home() {
                   <span className="realisations-card__title">Commerce — accès sur corde</span>
                 </figcaption>
               </figure>
+              <div className="realisations-card realisations-card--cta">
+                <p>Envie de voir<br />d&apos;autres chantiers&nbsp;?</p>
+                <a href="/realisations" className="btn btn--light btn--lg">Voir toutes nos réalisations →</a>
+              </div>
             </div>
           </div>
 
