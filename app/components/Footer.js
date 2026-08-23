@@ -12,6 +12,8 @@ export default function Footer() {
             <a href="/#services" className="footer-nav-link">Services<span className="arrow">→</span></a>
             <a href="/realisations" className="footer-nav-link">Réalisations<span className="arrow">→</span></a>
             <a href="/#faq" className="footer-nav-link">FAQ<span className="arrow">→</span></a>
+            <a href="/mentions-legales" className="footer-nav-link">Mentions légales<span className="arrow">→</span></a>
+            <a href="/politique-confidentialite" className="footer-nav-link">Politique de confidentialité<span className="arrow">→</span></a>
           </div>
 
           <div className="footer__col">
@@ -39,10 +41,6 @@ export default function Footer() {
 
       <div className="container footer__bottom">
         <p>© 2026 Flash Net. Tous droits réservés.</p>
-        <div className="footer__legal">
-          <a href="/mentions-legales">Mentions légales</a>
-          <a href="/politique-confidentialite">Politique de confidentialité</a>
-        </div>
       </div>
     </footer>
   );

@@ -789,12 +789,10 @@ p{margin:0;}
   transform:translateY(0);
 }
 .footer__bottom{
-  display:flex;flex-wrap:wrap;gap:14px 26px;justify-content:space-between;
+  display:flex;justify-content:center;text-align:center;
   padding:26px 0 30px;border-top:1px solid rgba(255,255,255,.14);
   font-size:.82rem;color:rgba(255,255,255,.6);
 }
-.footer__legal{display:flex;gap:20px;}
-.footer__legal a:hover{color:#fff;}
 
 @media (max-width:900px){
   .footer__cols{grid-template-columns:1fr 1fr;}
