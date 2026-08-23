@@ -131,27 +131,17 @@ export default function Home() {
       cleanups.push(() => servicesIo.disconnect());
     }
 
-    /* ---------- realisations : photo stack, navigated by click only (no scroll-linking of any kind) ---------- */
+    /* ---------- realisations : coverflow-style stack, navigated by click only (no scroll-linking of any kind) ---------- */
     const realisationsDeck = document.getElementById("realisationsDeck");
     const realisationsPrev = document.getElementById("realisationsPrev");
     const realisationsNext = document.getElementById("realisationsNext");
     if (realisationsDeck) {
-      const STACK_OFFSETS = [
-        { x: 0, y: 0, r: 0 },
-        { x: 22, y: 16, r: 3 },
-        { x: 40, y: 30, r: -3 },
-        { x: 54, y: 42, r: 2 },
-      ];
       let order = Array.from(realisationsDeck.querySelectorAll("[data-stack-card]"));
 
       function applyStackOrder() {
         order.forEach((card, i) => {
-          const visible = i < STACK_OFFSETS.length;
-          const o = STACK_OFFSETS[Math.min(i, STACK_OFFSETS.length - 1)];
-          card.style.transform = `translate(${o.x}px, ${o.y}px) rotate(${o.r}deg)`;
-          card.style.zIndex = String(order.length - i);
-          card.style.visibility = visible ? "visible" : "hidden";
-          card.classList.toggle("is-front", i === 0);
+          const pos = i === 0 ? "center" : i === 1 ? "right" : i === order.length - 1 ? "left" : "hidden";
+          card.dataset.pos = pos;
         });
       }
 
@@ -163,17 +153,17 @@ export default function Home() {
         order = [order[order.length - 1], ...order.slice(0, -1)];
         applyStackOrder();
       }
-      function bringToFront(card) {
-        const idx = order.indexOf(card);
-        if (idx <= 0) return;
-        order = [card, ...order.slice(0, idx), ...order.slice(idx + 1)];
-        applyStackOrder();
-      }
 
       applyStackOrder();
       if (realisationsNext) on(realisationsNext, "click", next);
       if (realisationsPrev) on(realisationsPrev, "click", prev);
-      order.forEach((card) => on(card, "click", () => bringToFront(card)));
+      order.forEach((card) => {
+        on(card, "click", () => {
+          const pos = card.dataset.pos;
+          if (pos === "left") prev();
+          if (pos === "right") next();
+        });
+      });
     }
 
     /* ---------- animated stat counters ---------- */
