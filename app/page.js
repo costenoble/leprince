@@ -131,6 +131,45 @@ export default function Home() {
       cleanups.push(() => servicesIo.disconnect());
     }
 
+    /* ---------- realisations : drag-to-scroll (desktop mouse only, touch/trackpad already scroll natively) ---------- */
+    const realisationsTrack = document.getElementById("realisationsTrack");
+    if (realisationsTrack) {
+      let isDragging = false;
+      let hasMoved = false;
+      let startX = 0;
+      let startScrollLeft = 0;
+
+      const onPointerDown = (e) => {
+        if (e.pointerType !== "mouse") return;
+        isDragging = true;
+        hasMoved = false;
+        startX = e.clientX;
+        startScrollLeft = realisationsTrack.scrollLeft;
+        realisationsTrack.classList.add("is-dragging");
+      };
+      const onPointerMove = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) hasMoved = true;
+        realisationsTrack.scrollLeft = startScrollLeft - dx;
+      };
+      const endDrag = () => {
+        isDragging = false;
+        realisationsTrack.classList.remove("is-dragging");
+      };
+      const onClickCapture = (e) => {
+        if (hasMoved) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
+
+      on(realisationsTrack, "pointerdown", onPointerDown);
+      on(window, "pointermove", onPointerMove);
+      on(window, "pointerup", endDrag);
+      on(realisationsTrack, "click", onClickCapture, true);
+    }
+
     /* ---------- animated stat counters ---------- */
     const statNums = document.querySelectorAll(".stat-tile__num");
     let statIo;
@@ -360,56 +399,54 @@ export default function Home() {
           <div className="container">
             <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
             <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
-            <p className="lede reveal" data-reveal>Continuez à faire défiler pour parcourir nos chantiers récents.</p>
+            <p className="lede reveal" data-reveal>Faites glisser pour parcourir nos chantiers récents.</p>
           </div>
 
           <div className="realisations-scroller" id="realisationsScroller">
-            <div className="realisations-scroller__sticky">
-              <div className="realisations-scroller__track" id="realisationsTrack">
-                <figure className="realisations-card">
-                  <img src="/assets/img/gallery-1.webp" alt="Nettoyage en hauteur d'une devanture" />
-                  <div className="realisations-card__overlay"></div>
-                  <figcaption>
-                    <span className="pill pill--tag">Commerce</span>
-                    <span className="realisations-card__title">Devanture — accès difficile</span>
-                  </figcaption>
-                </figure>
-                <figure className="realisations-card">
-                  <img src="/assets/img/gallery-2.webp" alt="Nacelle sur façade de bureaux" />
-                  <div className="realisations-card__overlay"></div>
-                  <figcaption>
-                    <span className="pill pill--tag">Bureaux</span>
-                    <span className="realisations-card__title">Bureaux — façade complète</span>
-                  </figcaption>
-                </figure>
-                <figure className="realisations-card">
-                  <img src="/assets/img/gallery-3.webp" alt="Immeuble de bureaux vitré" />
-                  <div className="realisations-card__overlay"></div>
-                  <figcaption>
-                    <span className="pill pill--tag">Bureaux</span>
-                    <span className="realisations-card__title">Tertiaire — hall &amp; façade</span>
-                  </figcaption>
-                </figure>
-                <figure className="realisations-card">
-                  <img src="/assets/img/gallery-4.webp" alt="Maison avec baies vitrées" />
-                  <div className="realisations-card__overlay"></div>
-                  <figcaption>
-                    <span className="pill pill--tag">Résidentiel</span>
-                    <span className="realisations-card__title">Résidentiel — véranda</span>
-                  </figcaption>
-                </figure>
-                <figure className="realisations-card">
-                  <img src="/assets/img/gallery-5.webp" alt="Technicien sur corde nettoyant une façade" />
-                  <div className="realisations-card__overlay"></div>
-                  <figcaption>
-                    <span className="pill pill--tag">Commerce</span>
-                    <span className="realisations-card__title">Commerce — accès sur corde</span>
-                  </figcaption>
-                </figure>
-                <div className="realisations-card realisations-card--cta">
-                  <p>Envie de voir<br />d&apos;autres chantiers&nbsp;?</p>
-                  <a href="/realisations" className="btn btn--light btn--lg">Voir toutes nos réalisations →</a>
-                </div>
+            <div className="realisations-scroller__track" id="realisationsTrack">
+              <figure className="realisations-card">
+                <img src="/assets/img/gallery-1.webp" alt="Nettoyage en hauteur d'une devanture" draggable="false" />
+                <div className="realisations-card__overlay"></div>
+                <figcaption>
+                  <span className="pill pill--tag">Commerce</span>
+                  <span className="realisations-card__title">Devanture — accès difficile</span>
+                </figcaption>
+              </figure>
+              <figure className="realisations-card">
+                <img src="/assets/img/gallery-2.webp" alt="Nacelle sur façade de bureaux" draggable="false" />
+                <div className="realisations-card__overlay"></div>
+                <figcaption>
+                  <span className="pill pill--tag">Bureaux</span>
+                  <span className="realisations-card__title">Bureaux — façade complète</span>
+                </figcaption>
+              </figure>
+              <figure className="realisations-card">
+                <img src="/assets/img/gallery-3.webp" alt="Immeuble de bureaux vitré" draggable="false" />
+                <div className="realisations-card__overlay"></div>
+                <figcaption>
+                  <span className="pill pill--tag">Bureaux</span>
+                  <span className="realisations-card__title">Tertiaire — hall &amp; façade</span>
+                </figcaption>
+              </figure>
+              <figure className="realisations-card">
+                <img src="/assets/img/gallery-4.webp" alt="Maison avec baies vitrées" draggable="false" />
+                <div className="realisations-card__overlay"></div>
+                <figcaption>
+                  <span className="pill pill--tag">Résidentiel</span>
+                  <span className="realisations-card__title">Résidentiel — véranda</span>
+                </figcaption>
+              </figure>
+              <figure className="realisations-card">
+                <img src="/assets/img/gallery-5.webp" alt="Technicien sur corde nettoyant une façade" draggable="false" />
+                <div className="realisations-card__overlay"></div>
+                <figcaption>
+                  <span className="pill pill--tag">Commerce</span>
+                  <span className="realisations-card__title">Commerce — accès sur corde</span>
+                </figcaption>
+              </figure>
+              <div className="realisations-card realisations-card--cta">
+                <p>Envie de voir<br />d&apos;autres chantiers&nbsp;?</p>
+                <a href="/realisations" className="btn btn--light btn--lg">Voir toutes nos réalisations →</a>
               </div>
             </div>
           </div>

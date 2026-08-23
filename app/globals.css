@@ -476,59 +476,34 @@ p{margin:0;}
 .ba-slider__label--before{left:22px;}
 .ba-slider__label--after{right:22px;}
 
-/* ---------- realisations : pinned horizontal scroller ---------- */
-/* Horizontal movement is driven natively by a scroll-linked CSS animation
-   (animation-timeline: view()) instead of a per-frame JS scroll handler,
-   so it can never lag behind the scroll input, even reversing direction. */
+/* ---------- realisations : native horizontal scroller (drag on desktop, swipe on touch) ---------- */
 .realisations-scroller{
   position:relative;
-  height:520vh;
   margin-top:44px;
-  view-timeline-name:--realisations-progress;
-  view-timeline-axis:block;
-}
-.realisations-scroller__sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
 }
 .realisations-scroller__track{
   --card-w:clamp(340px,68vw,760px);
-  --track-max-translate:calc(5 * var(--card-w) + 70px);
   display:flex;
   gap:14px;
-  padding-left:calc(50vw - var(--card-w)/2);
-  padding-right:calc(50vw - var(--card-w)/2);
-  animation:realisations-scroll linear;
-  animation-timeline:--realisations-progress;
-  animation-range:entry 100% exit 0%;
+  padding:6px 6vw 24px;
+  overflow-x:auto;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  cursor:grab;
+  user-select:none;
 }
-@keyframes realisations-scroll{
-  to{transform:translateX(calc(-1 * var(--track-max-translate)));}
-}
-@supports not (animation-timeline: view()){
-  .realisations-scroller{height:auto;view-timeline-name:none;}
-  .realisations-scroller__sticky{position:static;height:auto;overflow:visible;}
-  .realisations-scroller__track{
-    animation:none;
-    overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    padding-top:6px;padding-bottom:6px;
-  }
-  .realisations-card{scroll-snap-align:center;}
-}
+.realisations-scroller__track::-webkit-scrollbar{display:none;}
+.realisations-scroller__track.is-dragging{cursor:grabbing;scroll-snap-type:none;}
 .realisations-card{
   position:relative;
   flex:none;
   width:var(--card-w);
-  height:78vh;
+  height:60vh;
   border-radius:var(--radius-lg);
   overflow:hidden;
   box-shadow:var(--shadow-soft);
+  scroll-snap-align:center;
 }
 .realisations-card img{width:100%;height:100%;object-fit:cover;}
 .realisations-card__overlay{
@@ -549,8 +524,8 @@ p{margin:0;}
 .realisations-card--cta p{font-size:clamp(3.8rem,7vw,5.6rem);font-weight:800;line-height:1.04;overflow-wrap:break-word;}
 
 @media (max-width:720px){
-  .realisations-scroller__track{--card-w:92vw;}
-  .realisations-card{height:72vh;}
+  .realisations-scroller__track{--card-w:86vw;padding:6px 5vw 24px;}
+  .realisations-card{height:52vh;}
   .realisations-card--cta{padding:0 28px;}
   .realisations-card--cta p{font-size:clamp(2.2rem,9vw,3rem);}
 }
