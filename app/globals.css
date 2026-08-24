@@ -535,14 +535,14 @@ p{margin:0;}
 .realisations-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:32px;
+  gap:14px;
   margin-top:50px;
 }
 .realisations-grid-card{
   position:relative;
   border-radius:var(--radius-lg);
   overflow:hidden;
-  aspect-ratio:5/4;
+  aspect-ratio:4/5;
   box-shadow:var(--shadow-card);
   cursor:pointer;
   transition:transform .4s var(--ease), box-shadow .4s var(--ease);
@@ -575,9 +575,8 @@ p{margin:0;}
 .realisations-cta__inner .lede{margin-top:0;}
 
 @media (max-width:720px){
-  .realisations-grid{grid-template-columns:1fr;}
+  .realisations-grid{grid-template-columns:1fr;gap:16px;}
   .realisations-page-intro{padding-top:calc(80px + 30px);}
-  .realisations-grid-card{aspect-ratio:4/5;}
 }
 
 /* ---------- legal pages ---------- */
