@@ -542,7 +542,7 @@ p{margin:0;}
   position:relative;
   border-radius:var(--radius-lg);
   overflow:hidden;
-  aspect-ratio:4/5;
+  aspect-ratio:9/10;
   box-shadow:var(--shadow-card);
   cursor:pointer;
   transition:transform .4s var(--ease), box-shadow .4s var(--ease);
