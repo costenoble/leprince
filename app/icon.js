@@ -1,9 +1,13 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const fontData = await readFile(join(process.cwd(), "app/fonts/PlusJakartaSans-ExtraBold.ttf"));
+
   return new ImageResponse(
     (
       <div
@@ -13,16 +17,18 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0e7d72",
-          color: "#fff",
-          fontSize: 18,
+          background: "#f2efe4",
+          color: "#0e7d72",
+          fontSize: 22,
           fontWeight: 800,
-          letterSpacing: -1,
         }}
       >
-        FN
+        F
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: [{ name: "Plus Jakarta Sans", data: fontData, weight: 800, style: "normal" }],
+    }
   );
 }

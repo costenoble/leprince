@@ -145,7 +145,6 @@ export default function Header() {
       <header className="nav-wrap">
         <nav className="nav" id="nav">
           <a href="/" className="nav__brand">
-            <span className="nav__mark">FN</span>
             <span className="nav__word">Flash Net</span>
           </a>
           <div className="nav__actions">
