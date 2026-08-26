@@ -8,6 +8,10 @@ export default function MentionsLegales() {
     <main id="top">
       <section className="section legal-page">
         <div className="container legal-page__inner">
+          <a href="/" className="legal-page__back reveal" data-reveal>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Retour à l&apos;accueil
+          </a>
           <span className="pill pill--eyebrow reveal" data-reveal>Informations légales</span>
           <h1 className="h2 reveal" data-reveal>Mentions légales</h1>
 

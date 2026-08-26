@@ -170,6 +170,77 @@ export default function Home() {
       on(realisationsTrack, "click", onClickCapture, true);
     }
 
+    /* ---------- realisations : arrow navigation, hold to auto-scroll ---------- */
+    const realisationsPrev = document.getElementById("realisationsPrev");
+    const realisationsNext = document.getElementById("realisationsNext");
+    if (realisationsTrack && (realisationsPrev || realisationsNext)) {
+      const getCardStep = () => {
+        const card = realisationsTrack.querySelector(".realisations-card");
+        if (!card) return 320;
+        const trackStyle = getComputedStyle(realisationsTrack);
+        const gap = parseFloat(trackStyle.columnGap || trackStyle.gap || "0");
+        return card.getBoundingClientRect().width + gap;
+      };
+
+      const updateArrowState = () => {
+        const max = realisationsTrack.scrollWidth - realisationsTrack.clientWidth;
+        if (realisationsPrev) realisationsPrev.disabled = realisationsTrack.scrollLeft <= 4;
+        if (realisationsNext) realisationsNext.disabled = realisationsTrack.scrollLeft >= max - 4;
+      };
+
+      const setupHoldArrow = (btn, direction) => {
+        if (!btn) return;
+        let holdTimer = null;
+        let rafId = null;
+        let isHolding = false;
+
+        const autoScrollLoop = () => {
+          realisationsTrack.scrollLeft += direction * 9;
+          rafId = requestAnimationFrame(autoScrollLoop);
+        };
+        const startHold = () => {
+          isHolding = true;
+          realisationsTrack.classList.add("is-dragging");
+          rafId = requestAnimationFrame(autoScrollLoop);
+        };
+        const stopHold = () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = null;
+          if (holdTimer) clearTimeout(holdTimer);
+          holdTimer = null;
+          if (isHolding) realisationsTrack.classList.remove("is-dragging");
+          isHolding = false;
+        };
+
+        on(btn, "pointerdown", (e) => {
+          e.preventDefault();
+          holdTimer = setTimeout(startHold, 220);
+        });
+        on(btn, "pointerup", () => {
+          if (!isHolding) {
+            realisationsTrack.scrollBy({ left: direction * getCardStep(), behavior: "smooth" });
+          }
+          stopHold();
+        });
+        on(btn, "pointerleave", stopHold);
+        on(btn, "pointercancel", stopHold);
+      };
+
+      setupHoldArrow(realisationsPrev, -1);
+      setupHoldArrow(realisationsNext, 1);
+
+      let arrowTicking = false;
+      on(realisationsTrack, "scroll", () => {
+        if (arrowTicking) return;
+        arrowTicking = true;
+        requestAnimationFrame(() => {
+          updateArrowState();
+          arrowTicking = false;
+        });
+      }, { passive: true });
+      updateArrowState();
+    }
+
     /* ---------- animated stat counters ---------- */
     const statNums = document.querySelectorAll(".stat-tile__num");
     let statIo;
@@ -399,7 +470,15 @@ export default function Home() {
           <div className="container">
             <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
             <h2 className="h2 reveal" data-reveal>Un travail dont on est fiers</h2>
-            <p className="lede reveal" data-reveal>Faites glisser pour parcourir nos chantiers récents.</p>
+            <p className="lede reveal" data-reveal>Faites glisser, ou utilisez les flèches — restez appuyé pour défiler en continu.</p>
+            <div className="realisations-nav reveal" data-reveal>
+              <button type="button" className="realisations-nav__arrow" id="realisationsPrev" aria-label="Chantier précédent">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <button type="button" className="realisations-nav__arrow" id="realisationsNext" aria-label="Chantier suivant">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+            </div>
           </div>
 
           <div className="realisations-scroller" id="realisationsScroller">
