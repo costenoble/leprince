@@ -25,8 +25,8 @@ export default async function AppleIcon() {
           lineHeight: 1.1,
         }}
       >
-        <div>Flash</div>
-        <div>Net</div>
+        <div>FLASH</div>
+        <div>NET</div>
       </div>
     ),
     {

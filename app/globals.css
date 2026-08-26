@@ -178,7 +178,7 @@ p{margin:0;}
 .nav.is-fast{transition:box-shadow .3s, background .3s, transform .5s ease-out, opacity .5s ease-out;}
 .nav-wrap.is-scrolled .nav{box-shadow:0 16px 36px -16px rgba(7,48,43,.4);}
 .nav__brand{display:flex;align-items:center;gap:10px;}
-.nav__word{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--teal-700);}
+.nav__word{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--teal-700);text-transform:uppercase;}
 .nav__actions{display:flex;align-items:center;gap:10px;}
 .nav__link{background:transparent;color:var(--teal-700);border:1.5px solid var(--teal-700);}
 .nav__link:hover{background:var(--teal-700);color:#fff;}
