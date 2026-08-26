@@ -10,6 +10,10 @@ export default function Realisations() {
     <main id="top">
       <section className="section realisations-page-intro">
         <div className="container">
+          <a href="/" className="legal-page__back reveal" data-reveal>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            Retour à l&apos;accueil
+          </a>
           <span className="pill pill--eyebrow reveal" data-reveal>Nos réalisations</span>
           <h1 className="h2 reveal" data-reveal>Chaque chantier, une vitrine impeccable.</h1>
           <p className="lede reveal" data-reveal>
